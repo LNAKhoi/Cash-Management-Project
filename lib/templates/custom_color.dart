@@ -13,6 +13,7 @@ class CustomColor {
 
   static const darkblue = Color(0xff36539C);
   static const blue100 = Color(0xff007AFF);
+  static const navyBlue = Color(0xff036BA6);
 
   static const grey = Color(0xFF7D7D7D);
   static const grey20 = Color(0xFFF4F5F6);

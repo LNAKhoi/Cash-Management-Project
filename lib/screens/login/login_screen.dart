@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
+import 'package:cash_management_project/screens/register/register_screen.dart';
 import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:cash_management_project/templates/screen_navigator.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xffF3F3F3),
       body: buildBody(context),
     );
@@ -55,16 +56,19 @@ class _LoginScreenState extends State<LoginScreen>
       child: Container(
         alignment: Alignment.center,
         width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            buildLogo(),
-            SizedBox(height: 20),
-            buildLoginInput(context),
-            SizedBox(height: 32),
-            buildButtonLogin(context),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              buildLogo(),
+              SizedBox(height: 20),
+              buildLoginInput(context),
+              buildButtonLogin(context),
+              SizedBox(height: 16),
+              buildRegister(context),
+            ],
+          ),
         ),
       ),
     );
@@ -83,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen>
       SizedBox(height: 20),
       Text("Cash Management",
           style: TextStyle(
-              color: Color(0xff036BA6),
+              color: CustomColor.navyBlue,
               fontFamily: ".SF Pro Text",
               fontSize: 26,
               fontWeight: FontWeight.w600))
@@ -92,10 +96,11 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget buildLoginInput(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(
           decoration: BoxDecoration(
-            color: CustomColor.backgroundInputText,
+            color: CustomColor.grey.withOpacity(0.05),
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextField(
@@ -112,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen>
         SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
-            color: CustomColor.backgroundInputText,
+            color: CustomColor.grey.withOpacity(0.05),
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextField(
@@ -127,11 +132,8 @@ class _LoginScreenState extends State<LoginScreen>
             },
           ),
         ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [buildRegister(context), buildForgotPassword(context)],
-        )
+        buildForgotPassword(context),
+        SizedBox(height: 10),
       ],
     );
   }
@@ -144,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen>
         key: Key("loginButton"),
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Color(0xff036BA6),
+        color: CustomColor.navyBlue,
         onPressed: () {
           // todo: Navigate to home screen if account is valid
         },
@@ -165,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen>
       },
       child: Text("Forgot password?",
           style: TextStyle(
-              color: CustomColor.blue100,
+              color: CustomColor.navyBlue,
               fontFamily: ".SF Pro Text",
               fontSize: 15,
               fontWeight: FontWeight.w400)),
@@ -177,15 +179,21 @@ class _LoginScreenState extends State<LoginScreen>
         text: TextSpan(
       text: 'Not a member? ',
       style: TextStyle(
-          color: CustomColor.blue100,
+          color: CustomColor.neutral100,
           fontFamily: ".SF Pro Text",
           fontSize: 14,
           fontWeight: FontWeight.w400),
       children: [
         TextSpan(
-            recognizer: TapGestureRecognizer()..onTap = () {},
+            recognizer: TapGestureRecognizer()..onTap = () {
+              ScreenNavigator.navigateTo(context, RegisterScreen());
+            },
             text: 'Register here',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                color: CustomColor.navyBlue,
+                fontFamily: ".SF Pro Text",
+                fontSize: 15,
+                fontWeight: FontWeight.w600)),
       ],
     ));
   }
