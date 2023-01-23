@@ -3,6 +3,7 @@
 import 'package:cash_management_project/screens/login/login_screen.dart';
 import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:cash_management_project/templates/screen_navigator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -350,4 +351,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String formatDateTime(DateTime dateTime) {
     return dateTime.toString().split(" ").first;
   }
+
 }

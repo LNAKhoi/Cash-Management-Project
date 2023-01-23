@@ -3,6 +3,7 @@
 import 'package:cash_management_project/screens/register/register_screen.dart';
 import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:cash_management_project/templates/screen_navigator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,8 @@ class _LoginScreenState extends State<LoginScreen>
   // Animation Controller
   late AnimationController animationController;
   late Animation<double> animation;
-
-  TextEditingController inputUsername = TextEditingController();
+  String errorMessage = "";
+  TextEditingController inputEmail = TextEditingController();
   TextEditingController inputPassword = TextEditingController();
 
   double screenWidth = 1;
@@ -104,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen>
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextField(
-            controller: inputUsername,
+            controller: inputEmail,
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(12),
                 border: InputBorder.none,
@@ -149,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen>
         color: CustomColor.navyBlue,
         onPressed: () {
           // todo: Navigate to home screen if account is valid
+          signIn();
         },
         child: Text("Login",
             style: TextStyle(
@@ -185,9 +187,10 @@ class _LoginScreenState extends State<LoginScreen>
           fontWeight: FontWeight.w400),
       children: [
         TextSpan(
-            recognizer: TapGestureRecognizer()..onTap = () {
-              ScreenNavigator.navigateTo(context, RegisterScreen());
-            },
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                ScreenNavigator.navigateTo(context, RegisterScreen());
+              },
             text: 'Register here',
             style: TextStyle(
                 color: CustomColor.navyBlue,
@@ -197,4 +200,33 @@ class _LoginScreenState extends State<LoginScreen>
       ],
     ));
   }
+
+  Future signIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: inputEmail.text, password: inputPassword.text);
+    } on FirebaseAuthException catch (e) {
+      errorMessage = e.code;
+      _showAlertDialog(context, errorMessage);
+    }
+  }
+}
+
+void _showAlertDialog(BuildContext context, String errorMessage) {
+  showCupertinoModalPopup<void>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text('Error'),
+      content: Text(errorMessage),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
 }
