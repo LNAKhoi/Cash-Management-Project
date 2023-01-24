@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cash_management_project/authentication/Auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: TextButton(
         child: Text("Sign out"),
         onPressed: () {
-          FirebaseAuth.instance.signOut();
+          Auth().signOut();
         },
       ),
     );

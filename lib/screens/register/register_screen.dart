@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cash_management_project/authentication/Auth.dart';
 import 'package:cash_management_project/screens/login/login_screen.dart';
 import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:cash_management_project/templates/screen_navigator.dart';
@@ -26,7 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isPassword = false;
   DateTime date = DateTime.now();
 
-  
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
@@ -66,12 +66,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: screenWidth,
       height: screenHeight - 100,
       padding: EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        children: [
-          buildRegisterForm(context),
-          SizedBox(height: 16),
-          buildAlternativeLogins(context)
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildRegisterForm(context),
+            SizedBox(height: 16),
+            buildAlternativeLogins(context)
+          ],
+        ),
       ),
     );
   }
@@ -102,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     CustomColor.neutral70, 12, FontWeight.w400)),
             TextButton(
               onPressed: () {
-               Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Text(
                 "Sign in",
@@ -131,9 +133,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          buildInputField(firstNameController, "First name", screenWidth/2-24),
+          buildInputField(
+              firstNameController, "First name", screenWidth / 2 - 24),
           SizedBox(width: 16),
-          buildInputField(lastNameController, "Last name", screenWidth/2-24),
+          buildInputField(
+              lastNameController, "Last name", screenWidth / 2 - 24),
         ],
       ),
     );
@@ -141,9 +145,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget buildInputField(
       TextEditingController controller, String title, double containerWidth) {
-    if (title == "Password") {
-      isPassword = true;
-    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -158,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: CustomColor.neutral70)),
           child: TextField(
-            obscureText: isPassword,
+            obscureText: title == "Password" ? true : false,
             // textAlign: TextAlign.center,
             controller: controller,
             decoration: InputDecoration(
@@ -267,15 +269,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget buildJoinNowButton() {
-    return Container(
-        height: 40,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: CustomColor.navyBlue,
-            borderRadius: BorderRadius.circular(8)),
-        child: Text("Join now",
-            style: customCupertinoTextStyle(
-                CustomColor.white, 14, FontWeight.w600)));
+    return GestureDetector(
+      onTap: () {
+        Auth().createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+      },
+      child: Container(
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: CustomColor.navyBlue,
+              borderRadius: BorderRadius.circular(8)),
+          child: Text("Join now",
+              style: customCupertinoTextStyle(
+                  CustomColor.white, 14, FontWeight.w600))),
+    );
   }
 
   Widget buildAlternativeLogins(BuildContext context) {
@@ -351,5 +359,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String formatDateTime(DateTime dateTime) {
     return dateTime.toString().split(" ").first;
   }
-
 }
