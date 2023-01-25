@@ -1,9 +1,11 @@
 import 'package:cash_management_project/screens/home/home_screen.dart';
+import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cash_management_project/screens/login/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,19 +30,15 @@ class MyApp extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasError) {
-              return CupertinoAlertDialog(
-                title: Text("Failed to login"),
-                content: Text("Something went wrong.\nPlease try again!"),
-                actions: [
-                  CupertinoDialogAction(
-                    isDefaultAction: true,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Continue'),
-                  )
-                ],
-              );
+              Fluttertoast.showToast(
+        msg: "Something went wrong, please try again!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: CustomColor.neutral100 ,
+        fontSize: 16.0
+    );
             }
             if (snapshot.hasData) {
               return HomeScreen();

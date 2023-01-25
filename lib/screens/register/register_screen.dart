@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cash_management_project/authentication/Auth.dart';
+import 'package:cash_management_project/screens/home/home_screen.dart';
 import 'package:cash_management_project/screens/login/login_screen.dart';
 import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:cash_management_project/templates/screen_navigator.dart';
@@ -32,8 +33,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: CustomColor.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leadingWidth: 100,
         leading: Padding(
@@ -50,13 +53,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Text("Back",
                     style: customCupertinoTextStyle(
-                        CustomColor.navyBlue, 14.0, FontWeight.w400))
+                        CustomColor.navyBlue, 16.0, FontWeight.w600))
               ],
             ),
           ),
         ),
       ),
-      backgroundColor: CustomColor.white,
       body: Center(child: buildBody(context)),
     );
   }
@@ -91,37 +93,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Join us now",
+        Text("Create Account",
             style: TextStyle(
                 color: CustomColor.navyBlue,
                 fontFamily: ".SF Pro Text",
                 fontSize: 26,
                 fontWeight: FontWeight.w600)),
-        Row(
-          children: [
-            Text("or",
-                style: customCupertinoTextStyle(
-                    CustomColor.neutral70, 12, FontWeight.w400)),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                "Sign in",
-                style: customCupertinoTextStyle(
-                    CustomColor.navyBlue, 12, FontWeight.w600),
-              ),
-            )
-          ],
-        ),
         SizedBox(height: 10),
         buildNameInput(),
         buildInputField(emailController, "Email", screenWidth),
         buildInputField(passwordController, "Password", screenWidth),
         buildBirthDay(context),
         SizedBox(height: 20),
-        buildJoinNowButton(),
-        SizedBox(height: 16),
+        buildRegisterButton(),
+        SizedBox(height: 20),
         buildTermsAndCondition()
       ],
     );
@@ -145,7 +130,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget buildInputField(
       TextEditingController controller, String title, double containerWidth) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -268,11 +252,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget buildJoinNowButton() {
+  Widget buildRegisterButton() {
     return GestureDetector(
       onTap: () {
         Auth().createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
+            firstName: firstNameController.text.trim(),
+            lastName: lastNameController.text.trim(),
+            dob: birthdayController.text.trim(),
+            email: emailController.text,
+            password: passwordController.text);
+        if (!Auth.hasError) {
+          ScreenNavigator.navigateTo(context, HomeScreen());
+        }
       },
       child: Container(
           height: 40,
@@ -280,7 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: BoxDecoration(
               color: CustomColor.navyBlue,
               borderRadius: BorderRadius.circular(8)),
-          child: Text("Join now",
+          child: Text("Create",
               style: customCupertinoTextStyle(
                   CustomColor.white, 14, FontWeight.w600))),
     );

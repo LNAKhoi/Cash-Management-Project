@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
+import 'package:cash_management_project/authentication/Auth.dart';
+import 'package:cash_management_project/screens/home/home_screen.dart';
 import 'package:cash_management_project/screens/register/register_screen.dart';
 import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:cash_management_project/templates/screen_navigator.dart';
@@ -46,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen>
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Color(0xffF3F3F3),
+      backgroundColor: CustomColor.white,
       body: buildBody(context),
     );
   }
@@ -150,7 +152,11 @@ class _LoginScreenState extends State<LoginScreen>
         color: CustomColor.navyBlue,
         onPressed: () {
           // todo: Navigate to home screen if account is valid
-          signIn();
+          Auth().signInWithEmailAndPassword(
+              email: inputEmail.text, password: inputPassword.text);
+          if (!Auth.hasError) {
+            ScreenNavigator.navigateTo(context, HomeScreen());
+          }
         },
         child: Text("Login",
             style: TextStyle(
@@ -200,33 +206,4 @@ class _LoginScreenState extends State<LoginScreen>
       ],
     ));
   }
-
-  Future signIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: inputEmail.text, password: inputPassword.text);
-    } on FirebaseAuthException catch (e) {
-      errorMessage = e.code;
-      _showAlertDialog(context, errorMessage);
-    }
-  }
-}
-
-void _showAlertDialog(BuildContext context, String errorMessage) {
-  showCupertinoModalPopup<void>(
-    context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Error'),
-      content: Text(errorMessage),
-      actions: <CupertinoDialogAction>[
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
 }
