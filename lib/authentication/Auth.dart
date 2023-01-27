@@ -5,19 +5,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  static bool hasError = false;
   User? getCurrentuser() {
     return _firebaseAuth.currentUser;
   }
 
   Future<void> signInWithEmailAndPassword(
       {required String email, required String password}) async {
-    hasError = false;
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: email);
     } on FirebaseAuthException catch (e) {
-      hasError = true;
       Fluttertoast.showToast(
           msg: e.code,
           toastLength: Toast.LENGTH_LONG,
@@ -26,7 +23,6 @@ class Auth {
           backgroundColor: CustomColor.neutral40,
           textColor: CustomColor.neutral100,
           fontSize: 16.0);
-      return;
     }
   }
 
@@ -36,13 +32,12 @@ class Auth {
       required String dob,
       required String email,
       required String password}) async {
-    hasError = false;
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: email);
       await addUserData(firstName, lastName, dob, email);
+      await signOut();
     } on FirebaseAuthException catch (e) {
-      hasError = true;
       Fluttertoast.showToast(
           msg: e.code,
           toastLength: Toast.LENGTH_LONG,
@@ -51,16 +46,13 @@ class Auth {
           backgroundColor: CustomColor.neutral40,
           textColor: CustomColor.neutral100,
           fontSize: 16.0);
-      return;
     }
   }
 
   Future<void> signOut() async {
-    hasError = false;
     try {
       await _firebaseAuth.signOut();
     } on FirebaseAuthException catch (e) {
-      hasError = true;
       Fluttertoast.showToast(
           msg: e.code,
           toastLength: Toast.LENGTH_LONG,
@@ -69,7 +61,6 @@ class Auth {
           backgroundColor: CustomColor.neutral40,
           textColor: CustomColor.neutral100,
           fontSize: 16.0);
-      return;
     }
   }
 
