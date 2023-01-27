@@ -254,16 +254,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget buildRegisterButton() {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         Auth().createUserWithEmailAndPassword(
             firstName: firstNameController.text.trim(),
             lastName: lastNameController.text.trim(),
             dob: birthdayController.text.trim(),
             email: emailController.text,
             password: passwordController.text);
-        if (!Auth.hasError) {
-          ScreenNavigator.navigateTo(context, HomeScreen());
-        }
+        ScreenNavigator.navigateTo(context, LoginScreen());
       },
       child: Container(
           height: 40,
