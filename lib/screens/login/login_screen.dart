@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
 import 'package:cash_management_project/authentication/Auth.dart';
-import 'package:cash_management_project/screens/home/home_screen.dart';
 import 'package:cash_management_project/screens/register/register_screen.dart';
 import 'package:cash_management_project/templates/custom_color.dart';
 import 'package:cash_management_project/templates/screen_navigator.dart';
@@ -36,6 +35,9 @@ class _LoginScreenState extends State<LoginScreen>
     animation =
         CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
     animationController.repeat();
+    if (Auth().getCurrentuser() != null) {
+      print("NOT NULL");
+    }
   }
 
   void dispose() {
@@ -154,9 +156,6 @@ class _LoginScreenState extends State<LoginScreen>
           // todo: Navigate to home screen if account is valid
           Auth().signInWithEmailAndPassword(
               email: inputEmail.text, password: inputPassword.text);
-          if (!Auth.hasError) {
-            ScreenNavigator.navigateTo(context, HomeScreen());
-          }
         },
         child: Text("Login",
             style: TextStyle(
